@@ -132,4 +132,13 @@ export class BoardService {
       })
     );
   }
+
+  async refreshBoard(board: Board) {
+    const original = await DataStore.query(Board, board.id);
+    return DataStore.save(
+      Board.copyOf(original, (item) => {
+        item.cards = this.generateCards();
+      })
+    );
+  }
 }

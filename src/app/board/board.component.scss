@@ -13,7 +13,7 @@
   flex: 1 0 17%; /* The important bit. This percentage decides your columns.
      The percent can be px. It just represents your minimum starting width.
       */
-  margin: 5px;
+  margin: 4px;
   background: lightgray;
   height: 80px;
   min-width: 100px;
@@ -21,4 +21,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.board-controls-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.board-control {
+  margin: 8px 4px;
 }

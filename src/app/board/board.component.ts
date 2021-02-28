@@ -41,6 +41,12 @@ export class BoardComponent implements OnInit {
     return this.boardSerice.flipCard(board, value);
   }
 
+  newGame(board: Board) {
+    if (confirm('Are you sure you start a new game?')) {
+      return this.boardSerice.refreshBoard(board);
+    }
+  }
+
   getColor(card: Card, hasGameEnded: boolean) {
     if (card.flipped) {
       return 'white';

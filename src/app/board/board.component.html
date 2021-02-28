@@ -6,7 +6,18 @@
   class="board-container"
 >
   {{ board | json }}
-  <mat-slide-toggle (change)="onChange($event)">Spy Master</mat-slide-toggle>
+  <div class="board-controls-container">
+    <mat-slide-toggle class="board-control" (change)="onChange($event)"
+      >Spy Master</mat-slide-toggle
+    >
+    <button
+      class="board-control"
+      (click)="newGame(data.board)"
+      mat-raised-button
+    >
+      New game
+    </button>
+  </div>
   <div
     *ngIf="data.board && data.board.cards && data.board.cards.length"
     class="row"
