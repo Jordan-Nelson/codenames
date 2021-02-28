@@ -5,15 +5,41 @@
   } as data"
   class="board-container"
 >
-  {{ board | json }}
   <div class="board-controls-container">
-    <mat-slide-toggle class="board-control" (change)="onChange($event)"
-      >Spy Master</mat-slide-toggle
+    <mat-chip-list
+      class="board-control"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
     >
+      <mat-chip
+        color="accent"
+        [selected]="!isSpyMaster"
+        (click)="changePlayer()"
+      >
+        Player
+      </mat-chip>
+      <mat-chip
+        color="accent"
+        [selected]="isSpyMaster"
+        (click)="changeSpyMaster()"
+      >
+        Spy Master
+      </mat-chip>
+    </mat-chip-list>
+    <button
+      (click)="copy()"
+      mat-raised-button
+      color="primary"
+      class="board-control board-control-break"
+    >
+      Share this board <mat-icon>content_copy</mat-icon>
+    </button>
+
     <button
       class="board-control"
       (click)="newGame(data.board)"
       mat-raised-button
+      color="warn"
     >
       New game
     </button>

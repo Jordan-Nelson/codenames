@@ -4,6 +4,8 @@ import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Board, Card, CardType } from 'src/models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CopySnackBarComponent } from '../copy-snack-bar/copy-snack-bar.component';
 
 @Component({
   selector: 'app-board',
@@ -25,13 +27,22 @@ export class BoardComponent implements OnInit {
 
   constructor(
     private boardSerice: BoardService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {}
 
   onChange($event: MatSlideToggleChange) {
     this.isSpyMaster = $event.checked;
+  }
+
+  changePlayer() {
+    this.isSpyMaster = false;
+  }
+
+  changeSpyMaster() {
+    this.isSpyMaster = true;
   }
 
   flipCard(board: Board, value: string, hasGameEnded: boolean) {
@@ -45,6 +56,21 @@ export class BoardComponent implements OnInit {
     if (confirm('Are you sure you start a new game?')) {
       return this.boardSerice.refreshBoard(board);
     }
+  }
+
+  copy() {
+    var dummy = document.createElement('input'),
+      text = window.location.href;
+
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+
+    this._snackBar.openFromComponent(CopySnackBarComponent, {
+      duration: 2000,
+    });
   }
 
   getColor(card: Card, hasGameEnded: boolean) {

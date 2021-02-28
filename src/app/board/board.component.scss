@@ -24,12 +24,18 @@
 }
 
 .board-controls-container {
+  flex-wrap: wrap;
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .board-control {
   margin: 8px 4px;
+}
+
+@media (min-width: 486px) {
+  .board-control-break {
+    margin-left: auto;
+  }
 }
