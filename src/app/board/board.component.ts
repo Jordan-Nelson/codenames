@@ -29,13 +29,18 @@ export class BoardComponent implements OnInit {
   numberOfBlueCards$ = this.board$.pipe(
     map(
       (board) =>
-        board.cards.filter((card) => card.type === CardType.BLUE).length
+        board.cards.filter(
+          (card) => card.type === CardType.BLUE && !card.flipped
+        ).length
     )
   );
 
   numberOfRedCards$ = this.board$.pipe(
     map(
-      (board) => board.cards.filter((card) => card.type === CardType.RED).length
+      (board) =>
+        board.cards.filter(
+          (card) => card.type === CardType.RED && !card.flipped
+        ).length
     )
   );
 
