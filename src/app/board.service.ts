@@ -64,6 +64,22 @@ export class BoardService {
 
   constructor() {}
 
+  hasGameEnded(board: Board): boolean {
+    const blueCards = board.cards.filter((card) => card.type === CardType.BLUE);
+    const redCards = board.cards.filter((card) => card.type === CardType.RED);
+    const deathCard = board.cards.find((card) => card.type === CardType.DEATH);
+    if (deathCard.flipped) {
+      return true;
+    }
+    if (blueCards.every((card) => card.flipped)) {
+      return true;
+    }
+    if (redCards.every((card) => card.flipped)) {
+      return true;
+    }
+    return false;
+  }
+
   createBoard(name: string): Promise<Board> {
     return DataStore.save(
       new Board({
@@ -97,21 +113,22 @@ export class BoardService {
     return DataStore.observe(Board, id);
   }
 
-  async updateBoard(board: Board, value: string) {
+  async updateBoard(board: Board, valueOfCardToFlip: string) {
     const original = await DataStore.query(Board, board.id);
     console.log(original);
+    const newCards = original.cards.map((card) => {
+      if (card.value === valueOfCardToFlip) {
+        return new Card({
+          flipped: true,
+          type: card.type,
+          value: card.value,
+        });
+      }
+      return card;
+    });
     return DataStore.save(
       Board.copyOf(original, (item) => {
-        item.cards = original.cards.map((card) => {
-          if (card.value === value) {
-            return new Card({
-              flipped: true,
-              type: card.type,
-              value: card.value,
-            });
-          }
-          return card;
-        });
+        item.cards = newCards;
       })
     );
   }

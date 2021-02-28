@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../board.service';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Board, Card, CardType } from 'src/models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -19,6 +19,10 @@ export class BoardComponent implements OnInit {
     })
   );
 
+  hasGameEnded$ = this.board$.pipe(
+    map((board) => this.boardSerice.hasGameEnded(board))
+  );
+
   constructor(
     private boardSerice: BoardService,
     private route: ActivatedRoute
@@ -30,18 +34,18 @@ export class BoardComponent implements OnInit {
     this.isSpyMaster = $event.checked;
   }
 
-  flipCard(board: Board, value: string) {
-    if (this.isSpyMaster) {
+  flipCard(board: Board, value: string, hasGameEnded: boolean) {
+    if (this.isSpyMaster || hasGameEnded) {
       return;
     }
     return this.boardSerice.updateBoard(board, value);
   }
 
-  getColor(card: Card) {
+  getColor(card: Card, hasGameEnded: boolean) {
     if (card.flipped) {
       return 'white';
     }
-    if (!this.isSpyMaster) {
+    if (!this.isSpyMaster || hasGameEnded) {
       return 'black';
     }
     switch (card.type) {
@@ -56,7 +60,7 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  getBackgroundColor(card: Card) {
+  getBackgroundColor(card: Card, hasGameEnded: boolean) {
     if (card.flipped) {
       switch (card.type) {
         case CardType.BLUE:
@@ -64,11 +68,24 @@ export class BoardComponent implements OnInit {
         case CardType.RED:
           return 'red';
         case CardType.NEUTRAL:
-          return 'tan';
+          return 'BurlyWood';
         case CardType.DEATH:
           return 'black';
       }
     }
+    if (hasGameEnded) {
+      switch (card.type) {
+        case CardType.BLUE:
+          return 'lightblue';
+        case CardType.RED:
+          return 'pink';
+        case CardType.NEUTRAL:
+          return 'lightgray';
+        case CardType.DEATH:
+          return 'darkgrey';
+      }
+    }
+
     if (!this.isSpyMaster) {
       return 'lightgray';
     }

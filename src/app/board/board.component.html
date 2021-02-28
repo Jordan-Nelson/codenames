@@ -1,12 +1,21 @@
-<div *ngIf="board$ | async as board" class="board-container">
+<div
+  *ngIf="{
+    board: board$ | async,
+    hasGameEnded: hasGameEnded$ | async
+  } as data"
+  class="board-container"
+>
   {{ board | json }}
   <mat-slide-toggle (change)="onChange($event)">Spy Master</mat-slide-toggle>
-  <div class="row">
+  <div
+    *ngIf="data.board && data.board.cards && data.board.cards.length"
+    class="row"
+  >
     <div
-      *ngFor="let card of board.cards"
-      (click)="flipCard(board, card.value)"
-      [style.background-color]="getBackgroundColor(card)"
-      [style.color]="getColor(card)"
+      *ngFor="let card of data.board.cards"
+      (click)="flipCard(data.board, card.value, data.hasGameEnded)"
+      [style.background-color]="getBackgroundColor(card, data.hasGameEnded)"
+      [style.color]="getColor(card, data.hasGameEnded)"
       class="col"
     >
       {{ card.value }}
