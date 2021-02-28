@@ -1,0 +1,14 @@
+<div *ngIf="board$ | async as board" class="board-container">
+  <!-- {{ board | json }} -->
+  <mat-slide-toggle (change)="onChange($event)">Spy Master</mat-slide-toggle>
+  <div class="row">
+    <div
+      *ngFor="let card of board.Cards"
+      [style.background-color]="getBackgroundColor(card)"
+      [style.color]="getColor(card)"
+      class="col"
+    >
+      {{ card.value }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.board-container {
+  padding: 32px 16px;
+  margin: 0px auto;
+  max-width: 900px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 1 0 17%; /* The important bit. This percentage decides your columns.
+     The percent can be px. It just represents your minimum starting width.
+      */
+  margin: 5px;
+  background: lightgray;
+  height: 80px;
+  min-width: 100px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

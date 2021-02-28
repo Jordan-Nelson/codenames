@@ -1,0 +1,22 @@
+<div class="home-container">
+  <p>
+    Play Codenames online across multiple devices on a shared board. To create a
+    new game or join an existing game, enter a game identifier and click 'GO'.
+  </p>
+  <form class="example-form">
+    <mat-form-field class="codenames-board-input">
+      <mat-label>Board name</mat-label>
+      <input matInput #name maxlength="50" />
+      <mat-hint align="end">{{ name.value.length }} / 50</mat-hint>
+    </mat-form-field>
+    <button
+      (click)="createBoard(name.value)"
+      mat-raised-button
+      color="primary"
+      [class.spinner]="isPending"
+      [disabled]="isPending"
+    >
+      Create new board
+    </button>
+  </form>
+</div>
