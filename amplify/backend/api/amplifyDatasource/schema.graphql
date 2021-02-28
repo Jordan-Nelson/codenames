@@ -1,21 +1,21 @@
+type Board @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  Cards: [Card] @connection(keyName: "byBoard", fields: ["id"])
+}
+
+type Card @model @auth(rules: [{allow: public}]) @key(name: "byBoard", fields: ["boardID"]) {
+  id: ID!
+  value: String
+  flipped: Boolean
+  type: CardType
+  boardID: ID
+}
+
 enum CardType {
   ID
   BLUE
   RED
   NEUTRAL
   DEATH
-}
-
-type Card @model @auth(rules: [{allow: public}]) @key(name: "byBoard", fields: ["boardID"]) {
-  id: ID!
-  type: CardType
-  value: String
-  boardID: ID
-  flipped: Boolean
-}
-
-type Board @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  name: String
-  Cards: [Card] @connection(keyName: "byBoard", fields: ["id"])
 }

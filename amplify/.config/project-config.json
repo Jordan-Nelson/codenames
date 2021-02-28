@@ -1,17 +1,17 @@
 {
-  "projectName": "codenames",
-  "version": "3.0",
-  "frontend": "javascript",
-  "providers": [
-    "awscloudformation"
-  ],
-  "javascript": {
-    "framework": "angular",
-    "config": {
-      "SourceDir": "src",
-      "DistributionDir": "dist",
-      "BuildCommand": "npm run-script build",
-      "StartCommand": "ng serve"
+    "projectName": "codenames",
+    "version": "2.0",
+    "frontend": "javascript",
+    "providers": [
+        "awscloudformation"
+    ],
+    "javascript": {
+        "framework": "angular",
+        "config": {
+            "SourceDir": "src",
+            "DistributionDir": "dist",
+            "BuildCommand": "npm run-script build",
+            "StartCommand": "ng serve"
+        }
     }
-  }
 }

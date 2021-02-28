@@ -10,10 +10,10 @@ const CardType = {
   "DEATH": "DEATH"
 };
 
-const { Card, Board } = initSchema(schema);
+const { Board, Card } = initSchema(schema);
 
 export {
-  Card,
   Board,
+  Card,
   CardType
 };
