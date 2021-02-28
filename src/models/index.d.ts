@@ -20,7 +20,6 @@ export declare class Board {
   readonly id: string;
   readonly name?: string;
   readonly cards?: (Card | null)[];
-  readonly hasEnded?: boolean;
   constructor(init: ModelInit<Board>);
   static copyOf(source: Board, mutator: (draft: MutableModel<Board>) => MutableModel<Board> | void): Board;
 }
