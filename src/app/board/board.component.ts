@@ -38,7 +38,7 @@ export class BoardComponent implements OnInit {
     if (this.isSpyMaster || hasGameEnded) {
       return;
     }
-    return this.boardSerice.updateBoard(board, value);
+    return this.boardSerice.flipCard(board, value);
   }
 
   getColor(card: Card, hasGameEnded: boolean) {

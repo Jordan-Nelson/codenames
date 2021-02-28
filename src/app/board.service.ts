@@ -113,7 +113,7 @@ export class BoardService {
     return DataStore.observe(Board, id);
   }
 
-  async updateBoard(board: Board, valueOfCardToFlip: string) {
+  async flipCard(board: Board, valueOfCardToFlip: string) {
     const original = await DataStore.query(Board, board.id);
     console.log(original);
     const newCards = original.cards.map((card) => {
