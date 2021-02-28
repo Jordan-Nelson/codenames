@@ -9,6 +9,7 @@ type Board @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
   cards: [Card]
+  hasEnded: Boolean
 }
 
 enum CardType {

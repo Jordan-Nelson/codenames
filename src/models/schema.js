@@ -26,6 +26,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
+                },
+                "hasEnded": {
+                    "name": "hasEnded",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -103,5 +110,5 @@ export const schema = {
             }
         }
     },
-    "version": "dee1003e3cbd4c444bff433a0ce9ef84"
+    "version": "a1cf56cc125301b68128a01c97e7f135"
 };
