@@ -11,6 +11,7 @@ type Card @model @auth(rules: [{allow: public}]) @key(name: "byBoard", fields: [
   type: CardType
   value: String
   boardID: ID
+  flipped: Boolean
 }
 
 type Board @model @auth(rules: [{allow: public}]) {

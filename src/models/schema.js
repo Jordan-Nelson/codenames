@@ -32,6 +32,13 @@ export const schema = {
                     "type": "ID",
                     "isRequired": false,
                     "attributes": []
+                },
+                "flipped": {
+                    "name": "flipped",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -139,5 +146,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "2deeb66e6ab358b971bef5a9963ade52"
+    "version": "5d0ac1310b24d5e1199877ff02ee180b"
 };

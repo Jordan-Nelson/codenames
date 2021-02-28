@@ -15,6 +15,7 @@ export declare class Card {
   readonly type?: CardType | keyof typeof CardType;
   readonly value?: string;
   readonly boardID?: string;
+  readonly flipped?: boolean;
   constructor(init: ModelInit<Card>);
   static copyOf(source: Card, mutator: (draft: MutableModel<Card>) => MutableModel<Card> | void): Card;
 }
