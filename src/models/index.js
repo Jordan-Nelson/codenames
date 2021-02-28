@@ -14,6 +14,6 @@ const { Board, Card } = initSchema(schema);
 
 export {
   Board,
-  Card,
-  CardType
+  CardType,
+  Card
 };

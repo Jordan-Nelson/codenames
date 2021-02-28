@@ -17,19 +17,15 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Cards": {
-                    "name": "Cards",
+                "cards": {
+                    "name": "cards",
                     "isArray": true,
                     "type": {
-                        "model": "Card"
+                        "nonModel": "Card"
                     },
                     "isRequired": false,
                     "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "boardID"
-                    }
+                    "isArrayNullable": true
                 }
             },
             "syncable": true,
@@ -38,81 +34,6 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Card": {
-            "name": "Card",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "value": {
-                    "name": "value",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "flipped": {
-                    "name": "flipped",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "type": {
-                    "name": "type",
-                    "isArray": false,
-                    "type": {
-                        "enum": "CardType"
-                    },
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "boardID": {
-                    "name": "boardID",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "Cards",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "key",
-                    "properties": {
-                        "name": "byBoard",
-                        "fields": [
-                            "boardID"
-                        ]
-                    }
                 },
                 {
                     "type": "auth",
@@ -145,6 +66,42 @@ export const schema = {
             ]
         }
     },
-    "nonModels": {},
-    "version": "5d0ac1310b24d5e1199877ff02ee180b"
+    "nonModels": {
+        "Card": {
+            "name": "Card",
+            "fields": {
+                "NewField": {
+                    "name": "NewField",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "value": {
+                    "name": "value",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "CardType"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "flipped": {
+                    "name": "flipped",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        }
+    },
+    "version": "dee1003e3cbd4c444bff433a0ce9ef84"
 };
