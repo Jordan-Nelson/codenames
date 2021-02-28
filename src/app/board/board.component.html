@@ -3,8 +3,8 @@
   <mat-slide-toggle (change)="onChange($event)">Spy Master</mat-slide-toggle>
   <div class="row">
     <div
-      *ngFor="let card of board.Cards"
-      (click)="flipCard(board)"
+      *ngFor="let card of board.cards"
+      (click)="flipCard(board, card.value)"
       [style.background-color]="getBackgroundColor(card)"
       [style.color]="getColor(card)"
       class="col"

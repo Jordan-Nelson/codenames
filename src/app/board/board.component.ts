@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../board.service';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Board, Card, CardType } from 'src/models';
-import { from, Observable } from 'rxjs';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { CardService } from '../card.service';
 
 @Component({
   selector: 'app-board',
@@ -17,13 +15,12 @@ export class BoardComponent implements OnInit {
   board$ = this.route.params.pipe(
     switchMap((params) => {
       console.log(params);
-      return from(this.boardSerice.getBoard(params['id']));
+      return this.boardSerice.getBoard$(params['id']);
     })
   );
 
   constructor(
     private boardSerice: BoardService,
-    private cardService: CardService,
     private route: ActivatedRoute
   ) {}
 
@@ -33,16 +30,17 @@ export class BoardComponent implements OnInit {
     this.isSpyMaster = $event.checked;
   }
 
-  flipCard(board: Board) {
-    console.log(board);
-    return this.boardSerice.updateBoard(board);
-    // if (this.isSpyMaster) {
-    //   return;
-    // }
-    // return this.cardService.flipCard(card);
+  flipCard(board: Board, value: string) {
+    if (this.isSpyMaster) {
+      return;
+    }
+    return this.boardSerice.updateBoard(board, value);
   }
 
   getColor(card: Card) {
+    if (card.flipped) {
+      return 'white';
+    }
     if (!this.isSpyMaster) {
       return 'black';
     }
@@ -59,6 +57,18 @@ export class BoardComponent implements OnInit {
   }
 
   getBackgroundColor(card: Card) {
+    if (card.flipped) {
+      switch (card.type) {
+        case CardType.BLUE:
+          return 'blue';
+        case CardType.RED:
+          return 'red';
+        case CardType.NEUTRAL:
+          return 'tan';
+        case CardType.DEATH:
+          return 'black';
+      }
+    }
     if (!this.isSpyMaster) {
       return 'lightgray';
     }

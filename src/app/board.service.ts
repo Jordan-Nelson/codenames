@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataStore } from '@aws-amplify/datastore';
+import { Observable } from 'rxjs';
 import { Board, Card, CardType } from '../models';
 import { WORDS } from './words.constants';
 
@@ -67,7 +68,7 @@ export class BoardService {
     return DataStore.save(
       new Board({
         name,
-        Cards: this.generateCards(),
+        cards: this.generateCards(),
       })
     );
   }
@@ -76,12 +77,41 @@ export class BoardService {
     return DataStore.query(Board, id);
   }
 
-  async updateBoard(board: Board) {
-    // const original = await DataStore.query(Board, board.id);
-    // console.log(original);
+  getBoard$(id: string) {
+    const observable = new Observable<Board>((subscriber) => {
+      console.log('fetching first board');
+      this.getBoard(id).then((board) => {
+        subscriber.next(board);
+        console.log('subscribing');
+        console.log(id);
+        DataStore.observe(Board, id).subscribe((value) => {
+          console.log(value);
+          subscriber.next(value.element);
+        });
+      });
+    });
+    return observable;
+  }
+
+  observeBoard(id: string) {
+    return DataStore.observe(Board, id);
+  }
+
+  async updateBoard(board: Board, value: string) {
+    const original = await DataStore.query(Board, board.id);
+    console.log(original);
     return DataStore.save(
-      Board.copyOf(board, (item) => {
-        item.name = 'new name';
+      Board.copyOf(original, (item) => {
+        item.cards = original.cards.map((card) => {
+          if (card.value === value) {
+            return new Card({
+              flipped: true,
+              type: card.type,
+              value: card.value,
+            });
+          }
+          return card;
+        });
       })
     );
   }
