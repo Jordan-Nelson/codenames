@@ -47,9 +47,9 @@ export class BoardService {
       (word, index) =>
         new Card({
           type:
-            index <= 8
+            index <= 7
               ? CardType.BLUE
-              : index <= 17
+              : index <= 16
               ? CardType.RED
               : index <= 23
               ? CardType.NEUTRAL

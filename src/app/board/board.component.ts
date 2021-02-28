@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../board.service';
-import { map, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Board, Card, CardType } from 'src/models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -18,11 +18,25 @@ export class BoardComponent implements OnInit {
     switchMap((params) => {
       console.log(params);
       return this.boardSerice.getBoard$(params['id']);
-    })
+    }),
+    shareReplay()
   );
 
   hasGameEnded$ = this.board$.pipe(
     map((board) => this.boardSerice.hasGameEnded(board))
+  );
+
+  numberOfBlueCards$ = this.board$.pipe(
+    map(
+      (board) =>
+        board.cards.filter((card) => card.type === CardType.BLUE).length
+    )
+  );
+
+  numberOfRedCards$ = this.board$.pipe(
+    map(
+      (board) => board.cards.filter((card) => card.type === CardType.RED).length
+    )
   );
 
   constructor(

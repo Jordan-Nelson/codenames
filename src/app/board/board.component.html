@@ -1,11 +1,17 @@
 <div
   *ngIf="{
     board: board$ | async,
-    hasGameEnded: hasGameEnded$ | async
+    hasGameEnded: hasGameEnded$ | async,
+    numberOfBlueCards: numberOfBlueCards$ | async,
+    numberOfRedCards: numberOfRedCards$ | async
   } as data"
   class="board-container"
 >
   <div class="board-controls-container">
+    <span class="board-control board-control-score"
+      >Score: <span class="card-count-red">{{ data.numberOfRedCards }}</span> -
+      <span class="card-count-blue">{{ data.numberOfBlueCards }}</span>
+    </span>
     <mat-chip-list
       class="board-control"
       cdkDropList
