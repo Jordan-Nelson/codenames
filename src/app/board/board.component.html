@@ -10,61 +10,68 @@
   "
   class="board-container"
 >
-  <div class="board-controls-container">
-    <span class="board-control board-control-score"
-      >Score: <span class="card-count-red">{{ data.numberOfRedCards }}</span> -
-      <span class="card-count-blue">{{ data.numberOfBlueCards }}</span>
-    </span>
-    <mat-chip-list
-      class="board-control"
-      cdkDropList
-      cdkDropListOrientation="horizontal"
-    >
-      <mat-chip
-        color="accent"
-        [selected]="!isSpyMaster"
-        (click)="changePlayer()"
-      >
-        Player
-      </mat-chip>
-      <mat-chip
-        color="accent"
-        [selected]="isSpyMaster"
-        (click)="changeSpyMaster()"
-      >
-        Spy Master
-      </mat-chip>
-    </mat-chip-list>
-    <button
-      (click)="copy()"
-      mat-raised-button
-      color="primary"
-      class="board-control board-control-break"
-    >
-      Share this board <mat-icon>content_copy</mat-icon>
-    </button>
-
-    <button
-      class="board-control"
-      (click)="newGame(data.board)"
-      mat-raised-button
-      color="warn"
-    >
-      New game
-    </button>
+  <div *ngIf="!data.board">
+    We could not find the board you were looking for. Navigate
+    <a [routerLink]="'/'">home</a> to create a new board.
   </div>
-  <div
-    *ngIf="data.board && data.board.cards && data.board.cards.length"
-    class="row"
-  >
+  <div *ngIf="data.board">
+    <div class="board-controls-container">
+      <span class="board-control board-control-score"
+        >Score:
+        <span class="card-count-red">{{ data.numberOfRedCards }}</span> -
+        <span class="card-count-blue">{{ data.numberOfBlueCards }}</span>
+      </span>
+      <mat-chip-list
+        class="board-control"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+      >
+        <mat-chip
+          color="accent"
+          [selected]="!isSpyMaster"
+          (click)="changePlayer()"
+        >
+          Player
+        </mat-chip>
+        <mat-chip
+          color="accent"
+          [selected]="isSpyMaster"
+          (click)="changeSpyMaster()"
+        >
+          Spy Master
+        </mat-chip>
+      </mat-chip-list>
+      <button
+        (click)="copy()"
+        mat-raised-button
+        color="primary"
+        class="board-control board-control-break"
+      >
+        Share this board <mat-icon>content_copy</mat-icon>
+      </button>
+
+      <button
+        class="board-control"
+        (click)="newGame(data.board)"
+        mat-raised-button
+        color="warn"
+      >
+        New game
+      </button>
+    </div>
     <div
-      *ngFor="let card of data.board.cards"
-      (click)="flipCard(data.board, card.value, data.hasGameEnded)"
-      [style.background-color]="getBackgroundColor(card, data.hasGameEnded)"
-      [style.color]="getColor(card, data.hasGameEnded)"
-      class="col"
+      *ngIf="data.board && data.board.cards && data.board.cards.length"
+      class="row"
     >
-      {{ card.value }}
+      <div
+        *ngFor="let card of data.board.cards"
+        (click)="flipCard(data.board, card.value, data.hasGameEnded)"
+        [style.background-color]="getBackgroundColor(card, data.hasGameEnded)"
+        [style.color]="getColor(card, data.hasGameEnded)"
+        class="col"
+      >
+        {{ card.value }}
+      </div>
     </div>
   </div>
 </div>
