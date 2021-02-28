@@ -54,6 +54,7 @@ export class BoardService {
               ? CardType.NEUTRAL
               : CardType.DEATH,
           value: word,
+          flipped: false,
         })
     );
     shuffle(cards);
@@ -73,5 +74,15 @@ export class BoardService {
 
   getBoard(id: string): Promise<Board> {
     return DataStore.query(Board, id);
+  }
+
+  async updateBoard(board: Board) {
+    // const original = await DataStore.query(Board, board.id);
+    // console.log(original);
+    return DataStore.save(
+      Board.copyOf(board, (item) => {
+        item.name = 'new name';
+      })
+    );
   }
 }

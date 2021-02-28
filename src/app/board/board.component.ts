@@ -5,16 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Board, Card, CardType } from 'src/models';
 import { from, Observable } from 'rxjs';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-
-interface CardViewModel {
-  value: string;
-  backgroundColor: string;
-}
-
-interface BoardViewModel {
-  name: string;
-  cards: CardViewModel[];
-}
+import { CardService } from '../card.service';
 
 @Component({
   selector: 'app-board',
@@ -32,6 +23,7 @@ export class BoardComponent implements OnInit {
 
   constructor(
     private boardSerice: BoardService,
+    private cardService: CardService,
     private route: ActivatedRoute
   ) {}
 
@@ -39,6 +31,15 @@ export class BoardComponent implements OnInit {
 
   onChange($event: MatSlideToggleChange) {
     this.isSpyMaster = $event.checked;
+  }
+
+  flipCard(board: Board) {
+    console.log(board);
+    return this.boardSerice.updateBoard(board);
+    // if (this.isSpyMaster) {
+    //   return;
+    // }
+    // return this.cardService.flipCard(card);
   }
 
   getColor(card: Card) {
