@@ -30,14 +30,27 @@ export class BoardComponent implements OnInit {
   sessions$ = this.boardId$.pipe(
     switchMap((id) => {
       return this.sessionService.getSessions$(id);
-    })
+    }),
+    shareReplay()
   );
 
   redTeam$ = this.sessions$.pipe(
-    map((sessions) => sessions.filter((session) => session.team === Team.RED))
+    map((sessions) =>
+      sessions
+        .filter((session) => session.team === Team.RED)
+        .sort((sessionA, sessionB) =>
+          sessionA.displayName.localeCompare(sessionB.displayName)
+        )
+    )
   );
   blueTeam$ = this.sessions$.pipe(
-    map((sessions) => sessions.filter((session) => session.team === Team.BLUE))
+    map((sessions) =>
+      sessions
+        .filter((session) => session.team === Team.BLUE)
+        .sort((sessionA, sessionB) =>
+          sessionA.displayName.localeCompare(sessionB.displayName)
+        )
+    )
   );
 
   team$ = this.sessions$.pipe(

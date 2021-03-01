@@ -7,6 +7,10 @@ function generateRandomNumber(): number {
   return Math.floor(1000 + Math.random() * 9000);
 }
 
+function lastAvtiveMinimumDate() {
+  return new Date(new Date().getTime() - 45000);
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,7 +32,7 @@ export class SessionService {
     if (sessionId) {
       const session = await DataStore.query(Session, sessionId);
       if (session && session.boardID === boardId) {
-        return session;
+        return this.updateSessionLastActive(boardId, { spy: false });
       } else if (session) {
         return this.addSessionToBoard(boardId, session);
       }
@@ -41,6 +45,7 @@ export class SessionService {
       Session.copyOf(session, (item) => {
         item.lastActive = new Date().toISOString();
         item.boardID = boardId;
+        item.spy = false;
       })
     );
   }
@@ -68,12 +73,18 @@ export class SessionService {
     return DataStore.query(Session, sessionId);
   }
 
-  async updateSessionLastActive(boardId: string): Promise<Session> {
-    const session = await this.getSession();
+  async updateSessionLastActive(
+    boardId: string,
+    session: Partial<Session> = {}
+  ): Promise<Session> {
+    const currentSession = await this.getSession();
     return DataStore.save(
-      Session.copyOf(session, (item) => {
+      Session.copyOf(currentSession, (item) => {
         item.lastActive = new Date().toISOString();
         item.boardID = boardId;
+        if (session.spy !== null) {
+          item.spy = session.spy;
+        }
       })
     );
   }
@@ -96,7 +107,7 @@ export class SessionService {
   }
 
   getSessions(boardId: string): Promise<Session[]> {
-    const lastAvtiveMin = new Date(new Date().getTime() - 1 * 60000);
+    const lastAvtiveMin = new Date(new Date().getTime() - 45000);
     return DataStore.query(Session, (session) =>
       session
         .boardID('eq', boardId)
@@ -105,7 +116,7 @@ export class SessionService {
   }
 
   observeSessions(boardId: string) {
-    const lastAvtiveMin = new Date(new Date().getTime() + 3 * 60000);
+    const lastAvtiveMin = new Date(new Date().getTime() - 45000);
     return DataStore.observe(Session, (session) =>
       session
         .boardID('eq', boardId)
@@ -114,16 +125,26 @@ export class SessionService {
   }
 
   getSessions$(boardId: string): Observable<Session[]> {
+    let sessions: Session[] = [];
     const observable = new Observable<Session[]>((subscriber) => {
-      const getSessions = () => {
-        this.getSessions(boardId).then((sessions) => {
-          subscriber.next(sessions);
-          setTimeout(() => {
-            getSessions();
-          }, 2000);
-        });
-      };
-      getSessions();
+      this.getSessions(boardId).then((data) => {
+        sessions = data;
+        subscriber.next(sessions);
+      });
+      this.observeSessions(boardId).subscribe((data) => {
+        const newSession = data.element;
+        console.log(newSession);
+        const updatedSessions = sessions
+          .filter((session) => session.id !== newSession.id)
+          .filter(
+            (session) =>
+              new Date(session.lastActive).getTime() >
+              lastAvtiveMinimumDate().getTime()
+          );
+        updatedSessions.push(newSession);
+        sessions = updatedSessions;
+        subscriber.next(sessions);
+      });
     });
     return observable;
   }
