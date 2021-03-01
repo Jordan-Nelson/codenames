@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../board.service';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { Board, Card, CardType } from 'src/models';
+import { Board, Card, CardType, Session, Team } from 'src/models';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CopySnackBarComponent } from '../copy-snack-bar/copy-snack-bar.component';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-board',
@@ -14,12 +15,45 @@ import { CopySnackBarComponent } from '../copy-snack-bar/copy-snack-bar.componen
 })
 export class BoardComponent implements OnInit {
   isSpyMaster = false;
-  board$ = this.route.params.pipe(
-    switchMap((params) => {
-      console.log(params);
-      return this.boardSerice.getBoard$(params['id']);
+  boardId$ = this.route.params.pipe(
+    map((params) => {
+      return params['id'];
+    })
+  );
+  board$ = this.boardId$.pipe(
+    switchMap((id) => {
+      return this.boardSerice.getBoard$(id);
     }),
     shareReplay()
+  );
+
+  sessions$ = this.boardId$.pipe(
+    switchMap((id) => {
+      return this.sessionService.getSessions$(id);
+    })
+  );
+
+  redTeam$ = this.sessions$.pipe(
+    map((sessions) => sessions.filter((session) => session.team === Team.RED))
+  );
+  blueTeam$ = this.sessions$.pipe(
+    map((sessions) => sessions.filter((session) => session.team === Team.BLUE))
+  );
+
+  team$ = this.sessions$.pipe(
+    map((sessions) => {
+      const sessionId = this.sessionService.getSessionId();
+      const session = sessions.find(
+        (currentSession) => currentSession.id === sessionId
+      );
+      return session.team;
+    })
+  );
+
+  teamColor$ = this.team$.pipe(
+    map((team) =>
+      team === Team.BLUE ? 'RoyalBlue' : team === Team.RED ? 'Red' : 'lightgrey'
+    )
   );
 
   hasGameEnded$ = this.board$.pipe(
@@ -44,13 +78,45 @@ export class BoardComponent implements OnInit {
     )
   );
 
+  private updateSessionLastActive() {
+    return this.boardId$
+      .pipe(
+        switchMap((id) => {
+          return this.sessionService.updateSessionLastActive(id);
+        }),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  private joinBoard() {
+    return this.boardId$
+      .pipe(
+        switchMap((id) => {
+          return this.sessionService.joinBoard(id);
+        }),
+        take(1)
+      )
+      .subscribe();
+  }
+
   constructor(
     private boardSerice: BoardService,
+    private sessionService: SessionService,
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.joinBoard();
+    setInterval(() => {
+      this.updateSessionLastActive();
+    }, 15000);
+  }
+
+  changeTeam(session: Session) {
+    this.sessionService.changeTeam(session);
+  }
 
   onChange($event: MatSlideToggleChange) {
     this.isSpyMaster = $event.checked;
@@ -101,7 +167,7 @@ export class BoardComponent implements OnInit {
     }
     switch (card.type) {
       case CardType.BLUE:
-        return 'blue';
+        return 'RoyalBlue';
       case CardType.RED:
         return 'red';
       case CardType.NEUTRAL:
@@ -115,7 +181,7 @@ export class BoardComponent implements OnInit {
     if (card.flipped) {
       switch (card.type) {
         case CardType.BLUE:
-          return 'blue';
+          return 'RoyalBlue';
         case CardType.RED:
           return 'red';
         case CardType.NEUTRAL:

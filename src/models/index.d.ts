@@ -1,5 +1,11 @@
 import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplify/datastore";
 
+export enum Team {
+  ID = "ID",
+  BLUE = "BLUE",
+  RED = "RED"
+}
+
 export enum CardType {
   ID = "ID",
   BLUE = "BLUE",
@@ -21,6 +27,7 @@ export declare class Session {
   readonly displayName?: string;
   readonly lastActive?: string;
   readonly boardID?: string;
+  readonly team?: Team | keyof typeof Team;
   constructor(init: ModelInit<Session>);
   static copyOf(source: Session, mutator: (draft: MutableModel<Session>) => MutableModel<Session> | void): Session;
 }

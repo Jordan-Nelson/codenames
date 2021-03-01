@@ -76,4 +76,44 @@
   </div>
 </div>
 
+<div
+  class="board-container"
+  *ngIf="
+    {
+      redTeam: redTeam$ | async,
+      blueTeam: blueTeam$ | async
+    } as data;
+    else loading
+  "
+>
+  <h2>Red Team</h2>
+  <div class="no-team-message" *ngIf="!data?.redTeam?.length">
+    The red team has no team members
+  </div>
+  <mat-chip-list class="mat-chip-list-stacked">
+    <mat-chip
+      *ngFor="let session of data.redTeam"
+      selected
+      [style.background-color]="'Red'"
+      (click)="changeTeam(session)"
+    >
+      {{ session.displayName }}
+    </mat-chip>
+  </mat-chip-list>
+  <h2>Blue Team</h2>
+  <div class="no-team-message" *ngIf="!data?.blueTeam?.length">
+    The blue team has no team members
+  </div>
+  <mat-chip-list class="mat-chip-list-stacked">
+    <mat-chip
+      *ngFor="let session of data.blueTeam"
+      selected
+      [style.background-color]="'RoyalBlue'"
+      (click)="changeTeam(session)"
+    >
+      {{ session.displayName }}
+    </mat-chip>
+  </mat-chip-list>
+</div>
+
 <ng-template #loading> <mat-spinner></mat-spinner> </ng-template>

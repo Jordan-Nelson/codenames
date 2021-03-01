@@ -30,6 +30,15 @@ export const schema = {
                     "type": "ID",
                     "isRequired": false,
                     "attributes": []
+                },
+                "team": {
+                    "name": "team",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Team"
+                    },
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -135,6 +144,14 @@ export const schema = {
         }
     },
     "enums": {
+        "Team": {
+            "name": "Team",
+            "values": [
+                "ID",
+                "BLUE",
+                "RED"
+            ]
+        },
         "CardType": {
             "name": "CardType",
             "values": [
@@ -183,5 +200,5 @@ export const schema = {
             }
         }
     },
-    "version": "c236c7d022c49141fad473f598410996"
+    "version": "dd04e93a2cfa423bf13c43e8e4bd9f7d"
 };

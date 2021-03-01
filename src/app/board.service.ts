@@ -95,13 +95,9 @@ export class BoardService {
 
   getBoard$(id: string) {
     const observable = new Observable<Board>((subscriber) => {
-      console.log('fetching first board');
       this.getBoard(id).then((board) => {
         subscriber.next(board);
-        console.log('subscribing');
-        console.log(id);
         DataStore.observe(Board, id).subscribe((value) => {
-          console.log(value);
           subscriber.next(value.element);
         });
       });
@@ -115,7 +111,6 @@ export class BoardService {
 
   async flipCard(board: Board, valueOfCardToFlip: string) {
     const original = await DataStore.query(Board, board.id);
-    console.log(original);
     const newCards = original.cards.map((card) => {
       if (card.value === valueOfCardToFlip) {
         return new Card({
