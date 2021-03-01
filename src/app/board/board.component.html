@@ -10,9 +10,8 @@
   "
   class="board-container"
 >
-  <div *ngIf="!data.board">
-    We could not find the board you were looking for. Navigate
-    <a [routerLink]="'/'">home</a> to create a new board.
+  <div *ngIf="!data.board" class="board-spinner">
+    <mat-spinner></mat-spinner>
   </div>
   <div *ngIf="data.board">
     <div class="board-controls-container">
@@ -87,7 +86,14 @@
   "
 >
   <h2>Red Team</h2>
-  <div class="no-team-message" *ngIf="!data?.redTeam?.length">
+
+  <div class="no-team-message" *ngIf="!data || !data.redTeam">
+    <mat-spinner diameter="20"></mat-spinner>
+  </div>
+  <div
+    class="no-team-message"
+    *ngIf="data && data.redTeam && !data.redTeam.length"
+  >
     The red team has no team members
   </div>
   <mat-chip-list class="mat-chip-list-stacked">
@@ -101,8 +107,14 @@
     </mat-chip>
   </mat-chip-list>
   <h2>Blue Team</h2>
-  <div class="no-team-message" *ngIf="!data?.blueTeam?.length">
-    The blue team has no team members
+  <div class="no-team-message" *ngIf="!data || !data.blueTeam">
+    <mat-spinner diameter="20"></mat-spinner>
+  </div>
+  <div
+    class="no-team-message"
+    *ngIf="data && data.blueTeam && !data.blueTeam.length"
+  >
+    The vlue team has no team members
   </div>
   <mat-chip-list class="mat-chip-list-stacked">
     <mat-chip
