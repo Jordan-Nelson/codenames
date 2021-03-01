@@ -133,7 +133,6 @@ export class SessionService {
       });
       this.observeSessions(boardId).subscribe((data) => {
         const newSession = data.element;
-        console.log(newSession);
         const updatedSessions = sessions
           .filter((session) => session.id !== newSession.id)
           .filter(
