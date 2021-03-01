@@ -1,3 +1,10 @@
+type Session @model @auth(rules: [{allow: public}]) @key(name: "byBoard", fields: ["boardID"]) {
+  id: ID!
+  displayName: String
+  lastActive: AWSDateTime
+  boardID: ID
+}
+
 type Card {
   NewField: String
   value: String
@@ -9,6 +16,7 @@ type Board @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
   cards: [Card]
+  Sessions: [Session] @connection(keyName: "byBoard", fields: ["id"])
 }
 
 enum CardType {
@@ -18,3 +26,4 @@ enum CardType {
   NEUTRAL
   DEATH
 }
+ 

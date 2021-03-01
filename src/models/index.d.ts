@@ -16,10 +16,20 @@ export declare class Card {
   constructor(init: ModelInit<Card>);
 }
 
+export declare class Session {
+  readonly id: string;
+  readonly displayName?: string;
+  readonly lastActive?: string;
+  readonly boardID?: string;
+  constructor(init: ModelInit<Session>);
+  static copyOf(source: Session, mutator: (draft: MutableModel<Session>) => MutableModel<Session> | void): Session;
+}
+
 export declare class Board {
   readonly id: string;
   readonly name?: string;
   readonly cards?: (Card | null)[];
+  readonly Sessions?: (Session | null)[];
   constructor(init: ModelInit<Board>);
   static copyOf(source: Board, mutator: (draft: MutableModel<Board>) => MutableModel<Board> | void): Board;
 }
