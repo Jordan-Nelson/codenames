@@ -124,10 +124,12 @@ export class BoardComponent implements OnInit {
 
   changePlayer() {
     this.isSpyMaster = false;
+    this.sessionService.changeSpyStatus(false);
   }
 
   changeSpyMaster() {
     this.isSpyMaster = true;
+    return this.sessionService.changeSpyStatus(true);
   }
 
   flipCard(board: Board, value: string, hasGameEnded: boolean) {

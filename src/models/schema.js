@@ -39,6 +39,13 @@ export const schema = {
                     },
                     "isRequired": false,
                     "attributes": []
+                },
+                "spy": {
+                    "name": "spy",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -200,5 +207,5 @@ export const schema = {
             }
         }
     },
-    "version": "dd04e93a2cfa423bf13c43e8e4bd9f7d"
+    "version": "5f7af4ee8d53650ac7632647428da3ee"
 };

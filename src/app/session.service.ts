@@ -86,6 +86,15 @@ export class SessionService {
     );
   }
 
+  async changeSpyStatus(isSpy) {
+    const session = await this.getSession();
+    return DataStore.save(
+      Session.copyOf(session, (item) => {
+        item.spy = isSpy;
+      })
+    );
+  }
+
   getSessions(boardId: string): Promise<Session[]> {
     const lastAvtiveMin = new Date(new Date().getTime() - 1 * 60000);
     return DataStore.query(Session, (session) =>
@@ -111,7 +120,7 @@ export class SessionService {
           subscriber.next(sessions);
           setTimeout(() => {
             getSessions();
-          }, 3000);
+          }, 2000);
         });
       };
       getSessions();

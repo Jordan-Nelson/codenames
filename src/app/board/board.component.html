@@ -103,7 +103,7 @@
       [style.background-color]="'Red'"
       (click)="changeTeam(session)"
     >
-      {{ session.displayName }}
+      {{ session.displayName }} {{ session.spy ? "(Spy Master)" : "" }}
     </mat-chip>
   </mat-chip-list>
   <h2>Blue Team</h2>
@@ -123,7 +123,7 @@
       [style.background-color]="'RoyalBlue'"
       (click)="changeTeam(session)"
     >
-      {{ session.displayName }}
+      {{ session.displayName }} {{ session.spy ? "(Spy Master)" : "" }}
     </mat-chip>
   </mat-chip-list>
 </div>

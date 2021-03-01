@@ -28,6 +28,7 @@ export declare class Session {
   readonly lastActive?: string;
   readonly boardID?: string;
   readonly team?: Team | keyof typeof Team;
+  readonly spy?: boolean;
   constructor(init: ModelInit<Session>);
   static copyOf(source: Session, mutator: (draft: MutableModel<Session>) => MutableModel<Session> | void): Session;
 }
