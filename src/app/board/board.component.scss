@@ -56,9 +56,17 @@
 .card-count-blue {
   color: blue;
 }
-
-mat-chip {
-  max-width: 200px;
+.mat-chip-list-stacked {
+  mat-chip {
+    width: auto;
+    min-width: 0;
+    &.mat-chip-red {
+      background-color: red;
+    }
+    &.mat-chip-blue {
+      background-color: royalblue;
+    }
+  }
 }
 
 h2 {
