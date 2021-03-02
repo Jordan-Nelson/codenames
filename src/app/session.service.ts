@@ -71,6 +71,9 @@ export class SessionService {
 
   async getSession(): Promise<Session> {
     const sessionId = this.getSessionId();
+    if (!sessionId) {
+      return null;
+    }
     const session = await DataStore.query(Session, sessionId);
     this.displayName$.next(session.displayName);
     return session;
@@ -153,6 +156,7 @@ export class SessionService {
         const newSession = data.element;
         const updatedSessions = sessions
           .filter((session) => session.id !== newSession.id)
+          .filter((session) => session.boardID === boardId)
           .filter(
             (session) =>
               new Date(session.lastActive).getTime() >
