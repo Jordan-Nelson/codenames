@@ -15,6 +15,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {}
 
   createBoard(name: string) {
+    name = name.trim();
+    if (!name) {
+      return window.alert('Please enter a board name');
+    }
     this.isPending = true;
     this.boardService.createBoard(name).then((board) => {
       this.isPending = false;
