@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataStore } from 'aws-amplify';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Session, Team } from '../models';
 
 function generateRandomNumber(): number {
@@ -17,6 +17,8 @@ function lastAvtiveMinimumDate() {
 export class SessionService {
   storage = window.localStorage;
 
+  displayName$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
   constructor() {}
 
   getSessionId() {
@@ -28,15 +30,13 @@ export class SessionService {
   }
 
   async joinBoard(boardId: string): Promise<Session> {
-    const sessionId = this.getSessionId();
-    if (sessionId) {
-      const session = await DataStore.query(Session, sessionId);
-      if (session && session.boardID === boardId) {
-        return this.updateSessionLastActive(boardId, { spy: false });
-      } else if (session) {
-        return this.addSessionToBoard(boardId, session);
-      }
+    const session = await this.getSession();
+    if (session && session.boardID === boardId) {
+      return this.updateSessionLastActive(boardId, { spy: false });
+    } else if (session) {
+      return this.addSessionToBoard(boardId, session);
     }
+
     return this.createSession(boardId);
   }
 
@@ -54,6 +54,7 @@ export class SessionService {
     const username = 'User' + generateRandomNumber();
     const displayName =
       window.prompt('Enter a display name', username) || username;
+    this.displayName$.next(displayName);
     const team = Math.floor(Math.random() * 2) == 0 ? Team.RED : Team.BLUE;
     return DataStore.save(
       new Session({
@@ -70,7 +71,9 @@ export class SessionService {
 
   async getSession(): Promise<Session> {
     const sessionId = this.getSessionId();
-    return DataStore.query(Session, sessionId);
+    const session = await DataStore.query(Session, sessionId);
+    this.displayName$.next(session.displayName);
+    return session;
   }
 
   async updateSessionLastActive(
@@ -95,6 +98,21 @@ export class SessionService {
         item.team = session.team === Team.RED ? Team.BLUE : Team.RED;
       })
     );
+  }
+
+  async changeDisplayName() {
+    const newDisplayName = window.prompt('Enter a new display name');
+    if (!newDisplayName) {
+      return;
+    }
+    const currentSession = await this.getSession();
+    return DataStore.save(
+      Session.copyOf(currentSession, (item) => {
+        item.displayName = newDisplayName;
+      })
+    ).then(() => {
+      this.displayName$.next(newDisplayName);
+    });
   }
 
   async changeSpyStatus(isSpy) {

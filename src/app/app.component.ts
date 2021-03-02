@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SessionService } from './session.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AppComponent {
   title = 'codenames';
 
-  constructor(private _snackBar: MatSnackBar) {}
+  displayName$ = this.sessionService.displayName$;
+
+  constructor(private sessionService: SessionService) {}
+
+  ngOnInit(): void {
+    this.sessionService.getSession();
+  }
+
+  changeDisplayName() {
+    this.sessionService.changeDisplayName();
+  }
 }

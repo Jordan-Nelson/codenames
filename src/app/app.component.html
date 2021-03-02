@@ -4,6 +4,12 @@
   </a>
 
   <span class="example-spacer"></span>
+  <ng-container *ngIf="displayName$ | async as displayName">
+    <span *ngIf="displayName">
+      <span class="display-name">{{ displayName }}</span>
+      <mat-icon (click)="changeDisplayName()">edit</mat-icon>
+    </span>
+  </ng-container>
 </mat-toolbar>
 
 <router-outlet></router-outlet>
